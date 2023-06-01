@@ -1,4 +1,4 @@
-package com.redhaputra.movieapp.core
+package com.redhaputra.movieapp.core.di.module
 
 import dagger.Module
 import dagger.hilt.InstallIn
