@@ -3,9 +3,11 @@ package com.redhaputra.movieapp.screen.home
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
@@ -17,6 +19,7 @@ import com.redhaputra.movieapp.common.ui.adapters.MovieListPagingListener
 import com.redhaputra.movieapp.common.ui.adapters.PeekingLinearLayoutManager
 import com.redhaputra.movieapp.common.ui.base.BaseFragment
 import com.redhaputra.movieapp.databinding.FragmentHomeBinding
+import com.redhaputra.movieapp.screen.detail.DetailMovieFragment.Companion.MOVIE_ID_KEY
 import com.redhaputra.movieapp.screen.home.adapter.PopularMoviePagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -40,12 +43,34 @@ class HomeFragment :
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeClickAction()
         observeViewModel()
         setupPagingAdapter()
         setupPopularPagingListener()
     }
 
     override fun onClick(movieId: Int?) {
+        // go to detail movie
+        safeToNavigate(R.id.action_homeFragment_to_detailMovieFragment) {
+            findNavController().navigate(it, bundleOf(MOVIE_ID_KEY to movieId))
+        }
+    }
+
+    private fun observeClickAction() {
+        // go to favorite movie
+        viewBinding.ivToolbarFavorite.setOnClickListener {
+            safeToNavigate(R.id.action_homeFragment_to_favoriteMovieFragment) {
+                findNavController().navigate(it)
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.popularMovieList.observe(viewLifecycleOwner) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                popularAdapter.submitData(it)
+            }
+        }
     }
 
     private fun setupPagingAdapter() {
@@ -118,14 +143,6 @@ class HomeFragment :
         }
         error?.let {
             Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun observeViewModel() {
-        viewModel.popularMovieList.observe(viewLifecycleOwner) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                popularAdapter.submitData(it)
-            }
         }
     }
 }
