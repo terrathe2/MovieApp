@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="body_text_color">#FF000000</color>
+    <color name="default_line">#545454</color>
+    <color name="img_background">#EAEAEA</color>
+    <color name="overlay">#8022211f</color>
+    <color name="toolbar_title">#FFFFFF</color>
 </resources>

@@ -1,4 +1,4 @@
-package com.redhaputra.movieapp.core.di.module.adapter
+package com.redhaputra.movieapp.core.network.adapter
 
 /**
  * Generic network response
