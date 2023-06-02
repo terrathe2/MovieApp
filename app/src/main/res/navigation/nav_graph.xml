@@ -30,11 +30,21 @@
     <fragment
         android:id="@+id/detailMovieFragment"
         android:name="com.redhaputra.movieapp.screen.detail.DetailMovieFragment"
-        android:label="DetailMovieFragment" />
+        android:label="DetailMovieFragment">
+
+        <action
+            android:id="@+id/action_detailMovieFragment_to_detailBottomSheetFragment"
+            app:destination="@id/detailBottomSheet" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/favoriteMovieFragment"
         android:name="com.redhaputra.movieapp.screen.favorite.FavoriteMovieFragment"
         android:label="FavoriteMovieFragment" />
+
+    <dialog
+        android:id="@+id/detailBottomSheet"
+        android:name="com.redhaputra.movieapp.screen.detail.DetailBottomSheetFragment" />
 
 </navigation>

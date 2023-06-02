@@ -58,6 +58,12 @@ class DetailMovieFragment :
         viewBinding.ivDetailToolbarBack.setOnClickListener {
             onBackPressed()
         }
+
+        viewBinding.ivDetailShare.setOnClickListener {
+            safeToNavigate(R.id.action_detailMovieFragment_to_detailBottomSheetFragment) {
+                findNavController().navigate(it)
+            }
+        }
     }
 
     private fun observeViewModel() {
