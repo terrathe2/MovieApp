@@ -6,7 +6,6 @@ import com.bumptech.glide.RequestManager
 import com.redhaputra.movieapp.R
 import com.redhaputra.movieapp.common.ui.base.BaseViewHolder
 import com.redhaputra.movieapp.common.ui.model.MovieData
-import com.redhaputra.movieapp.common.ui.utils.StringUtils.toPosterImg
 import com.redhaputra.movieapp.databinding.ItemListMovieBinding
 
 /**
@@ -29,13 +28,14 @@ class MovieListViewHolder(
     fun bind(data: MovieData, glide: RequestManager) {
         binding.item = data
         binding.root.setOnClickListener {
-            listener.onClick(data.id)
+            listener.onClick(data)
         }
         binding.ivMovie.setPadding(0, 0, 0, 0)
         if (data.posterImg.isNotEmpty()) {
-            glide.load(data.posterImg.toPosterImg())
+            glide.load(data.posterImg)
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty_movie_img_24)
+                .error(R.drawable.ic_empty_movie_img_24)
                 .into(binding.ivMovie)
         }
         binding.executePendingBindings()

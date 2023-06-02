@@ -2,6 +2,7 @@ package com.redhaputra.movieapp.core.network.response
 
 import androidx.annotation.Keep
 import com.redhaputra.movieapp.common.ui.model.MovieData
+import com.redhaputra.movieapp.common.ui.utils.StringUtils.toPosterImg
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -30,8 +31,8 @@ data class ItemMoviesResponse(
 fun ItemMoviesResponse.asExternalData(): MovieData =
     MovieData(
         id = id ?: 0,
-        backImg = backImg ?: "",
-        posterImg = posterImg ?: "",
+        backImg = backImg?.toPosterImg() ?: "",
+        posterImg = posterImg?.toPosterImg() ?: "",
         overview = overview ?: "-",
         title = title ?: "-"
     )

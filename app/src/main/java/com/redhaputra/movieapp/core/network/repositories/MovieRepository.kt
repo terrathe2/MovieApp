@@ -4,6 +4,7 @@ import com.redhaputra.movieapp.common.ui.model.MovieListType
 import com.redhaputra.movieapp.core.network.adapter.NetworkResponse
 import com.redhaputra.movieapp.core.network.body.MovieListBody
 import com.redhaputra.movieapp.core.network.response.MovieListResponse
+import com.redhaputra.movieapp.core.network.response.ReviewListResponse
 import com.redhaputra.movieapp.core.network.services.MovieService
 import java.io.IOException
 
@@ -21,7 +22,7 @@ class MovieRepository(
     }
 
     /**
-     * Get popular movie list response method handling
+     * Get movie list response method handling based on movie list type
      *
      * @param params Parameter that needed for fetch Popular Movie List
      */
@@ -39,6 +40,34 @@ class MovieRepository(
                 MovieListType.NOW_PLAYING -> service.getNowPlayingMovieList(queryMap)
             }
 
+            if (request.isSuccessful) {
+                val body = request.body()
+                return NetworkResponse.Success(body)
+            }
+
+            throw Exception(UNKNOWN_ERR)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                return NetworkResponse.Error(CONNECTION_ERR)
+            }
+
+            return NetworkResponse.Error(SERVER_ERR)
+        }
+    }
+
+    /**
+     * Get movie reviews response method handling
+     *
+     * @param movieId Movie ID that needed for fetch Movie Reviews
+     */
+    suspend fun getMovieReviews(movieId: Int): NetworkResponse<ReviewListResponse> {
+        val queryMap = mapOf(
+            "language" to "en-US",
+            "page" to 1
+        )
+
+        try {
+            val request = service.getMovieReviews(id = movieId, query = queryMap)
             if (request.isSuccessful) {
                 val body = request.body()
                 return NetworkResponse.Success(body)

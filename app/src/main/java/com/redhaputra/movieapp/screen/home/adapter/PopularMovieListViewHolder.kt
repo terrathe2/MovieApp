@@ -7,7 +7,6 @@ import com.redhaputra.movieapp.R
 import com.redhaputra.movieapp.common.ui.adapters.MovieListPagingListener
 import com.redhaputra.movieapp.common.ui.base.BaseViewHolder
 import com.redhaputra.movieapp.common.ui.model.MovieData
-import com.redhaputra.movieapp.common.ui.utils.StringUtils.toPosterImg
 import com.redhaputra.movieapp.databinding.ItemListPopularMovieBinding
 
 /**
@@ -29,13 +28,14 @@ class PopularMovieListViewHolder(
      */
     fun bind(data: MovieData, glide: RequestManager) {
         binding.root.setOnClickListener {
-            listener.onClick(data.id)
+            listener.onClick(data)
         }
         binding.ivPopularMovie.setPadding(0, 0, 0, 0)
         if (data.backImg.isNotEmpty()) {
-            glide.load(data.backImg.toPosterImg())
+            glide.load(data.backImg)
                 .fitCenter()
                 .placeholder(R.drawable.ic_empty_movie_img_24)
+                .error(R.drawable.ic_empty_movie_img_24)
                 .into(binding.ivPopularMovie)
         }
         binding.executePendingBindings()
