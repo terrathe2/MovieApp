@@ -4,6 +4,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -50,6 +51,7 @@ class DetailMovieFragment :
         }
         movieData?.let {
             viewModel.setMovieData(it)
+            viewModel.setFavorites(it)
             viewModel.getMovieReviews(movieData.id)
         }
     }
@@ -80,6 +82,16 @@ class DetailMovieFragment :
                 .placeholder(R.drawable.ic_empty_movie_img_24)
                 .error(R.drawable.ic_empty_movie_img_24)
                 .into(viewBinding.ivDetailMovie)
+        }
+
+        viewModel.isFavoriteEvent.observe(viewLifecycleOwner) {
+            val iconId = if (it) {
+                R.drawable.ic_favorite_24
+            } else {
+                R.drawable.ic_outline_favorite_24
+            }
+            val favIcon = ContextCompat.getDrawable(requireContext(), iconId)
+            viewBinding.ivDetailFavorite.setImageDrawable(favIcon)
         }
     }
 

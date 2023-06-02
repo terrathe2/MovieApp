@@ -3,6 +3,7 @@ package com.redhaputra.movieapp.screen.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.redhaputra.movieapp.common.ui.model.MovieData
 import com.redhaputra.movieapp.core.network.adapter.NetworkResponse
@@ -26,6 +27,9 @@ class DetailMovieViewModel @Inject constructor(
     private val repository: MovieRepository
 ) : ViewModel() {
 
+    private val favoritesMovie: MutableList<MovieData> =
+        repository.loadFavoritesMovie() ?: mutableListOf()
+
     private val _movieData = MutableLiveData<MovieData>()
     val movieData: LiveData<MovieData> = _movieData
 
@@ -38,11 +42,21 @@ class DetailMovieViewModel @Inject constructor(
     private val _errorEvent = MutableSharedFlow<String>()
     val errorEvent: SharedFlow<String> = _errorEvent.asSharedFlow()
 
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavoriteEvent: LiveData<Boolean> = _isFavorite.distinctUntilChanged()
+
     /**
      * Handle set movie id for fetch body
      */
     fun setMovieData(movieData: MovieData) {
         _movieData.value = movieData
+    }
+
+    /**
+     * Check Favorites movie
+     */
+    fun setFavorites(movieData: MovieData) {
+        _isFavorite.value = isFavoriteMovie(movieData)
     }
 
     /**
@@ -79,5 +93,24 @@ class DetailMovieViewModel @Inject constructor(
         viewModelScope.launch {
             getMovieReviews(_movieData.value?.id ?: 0)
         }
+    }
+
+    private fun isFavoriteMovie(movieData: MovieData): Boolean =
+        favoritesMovie.find { it.id == movieData.id } != null
+
+    /**
+     * Toggle favorite movie
+     */
+    fun toggleFavoriteMovie() {
+        val movieIndex = favoritesMovie.indexOf(_movieData.value)
+
+        if (movieIndex == -1) {
+            _movieData.value?.let { favoritesMovie.add(it) }
+        } else {
+            favoritesMovie.removeAt(movieIndex)
+        }
+
+        _isFavorite.value = movieIndex == -1
+        repository.inputFavoritesMovie(favoritesMovie)
     }
 }

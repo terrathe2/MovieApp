@@ -1,24 +1,32 @@
 package com.redhaputra.movieapp.core.network.repositories
 
+import android.content.SharedPreferences
+import com.redhaputra.movieapp.common.ui.model.MovieData
 import com.redhaputra.movieapp.common.ui.model.MovieListType
 import com.redhaputra.movieapp.core.network.adapter.NetworkResponse
 import com.redhaputra.movieapp.core.network.body.MovieListBody
 import com.redhaputra.movieapp.core.network.response.MovieListResponse
 import com.redhaputra.movieapp.core.network.response.ReviewListResponse
 import com.redhaputra.movieapp.core.network.services.MovieService
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import java.io.IOException
+
 
 /**
  * Repository module for handling Movie api response operations.
  */
 class MovieRepository(
-    private val service: MovieService
+    private val sharedPref: SharedPreferences,
+    private val moshi: Moshi,
+    private val service: MovieService,
 ) {
 
     companion object {
         private const val CONNECTION_ERR = "Connection Error"
         private const val SERVER_ERR = "Server Error"
         private const val UNKNOWN_ERR = "Unknown Error"
+        private const val FAVORITES_MOVIE_KEY = "FAVORITES_MOVIE_KEY"
     }
 
     /**
@@ -81,5 +89,26 @@ class MovieRepository(
 
             return NetworkResponse.Error(SERVER_ERR)
         }
+    }
+
+    /**
+     * Save and edit list favorite movie to local
+     */
+    fun inputFavoritesMovie(list: MutableList<MovieData>?) =
+        list?.let {
+            val type = Types.newParameterizedType(MutableList::class.java, MovieData::class.java)
+            val jsonList = moshi.adapter<MutableList<MovieData>>(type).toJson(it)
+            sharedPref.edit()
+                .putString(FAVORITES_MOVIE_KEY, jsonList)
+                .commit()
+        }
+
+    /**
+     * Load Favorites data
+     */
+    fun loadFavoritesMovie(): MutableList<MovieData>? {
+        val type = Types.newParameterizedType(MutableList::class.java, MovieData::class.java)
+        val jsonProfile = sharedPref.getString(FAVORITES_MOVIE_KEY, null) ?: return null
+        return moshi.adapter<MutableList<MovieData>>(type).fromJson(jsonProfile)
     }
 }
