@@ -1,7 +1,9 @@
 package com.redhaputra.movieapp.core.di.module
 
+import android.content.SharedPreferences
 import com.redhaputra.movieapp.core.network.repositories.MovieRepository
 import com.redhaputra.movieapp.core.network.services.MovieService
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,5 +26,9 @@ object RepositoryModule {
      */
     @Singleton
     @Provides
-    fun provideMovieRepository(service: MovieService) = MovieRepository(service)
+    fun provideMovieRepository(
+        sharedPref: SharedPreferences,
+        moshi: Moshi,
+        service: MovieService
+    ) = MovieRepository(sharedPref, moshi, service)
 }

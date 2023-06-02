@@ -2,13 +2,22 @@
     <string name="app_name">MovieApp</string>
 
     <!-- Image Content Description -->
+    <string name="cd_back_icon">Back Icon</string>
     <string name="cd_favorite_icon">Favorite Icon</string>
     <string name="cd_loading_icon">Loading Icon</string>
     <string name="cd_movie_image">Movie Image</string>
+    <string name="cd_option_icon">Option Icon</string>
 
+    <string name="detail">Detail</string>
     <string name="empty_movie_list_desc">Movie List is empty</string>
     <string name="movie">Movie</string>
     <string name="now_playing">Now Playing</string>
+    <string name="option_1">Option 1</string>
+    <string name="option_2">Option 2</string>
+    <string name="option_3">Option 3</string>
+    <string name="overview">Overview</string>
     <string name="popular_movie">Popular Movie</string>
+    <string name="review">Review</string>
+    <string name="share_movie">Share Movie</string>
     <string name="top_rated">Top Rated</string>
 </resources>

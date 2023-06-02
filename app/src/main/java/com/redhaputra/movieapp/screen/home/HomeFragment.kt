@@ -24,7 +24,7 @@ import com.redhaputra.movieapp.common.ui.base.BasePagingAdapter
 import com.redhaputra.movieapp.common.ui.model.MovieData
 import com.redhaputra.movieapp.common.ui.model.MovieListType
 import com.redhaputra.movieapp.databinding.FragmentHomeBinding
-import com.redhaputra.movieapp.screen.detail.DetailMovieFragment.Companion.MOVIE_ID_KEY
+import com.redhaputra.movieapp.screen.detail.DetailMovieFragment.Companion.MOVIE_DATA_KEY
 import com.redhaputra.movieapp.screen.home.adapter.PopularMoviePagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -66,10 +66,10 @@ class HomeFragment :
         setupNowPlayingPagingListener()
     }
 
-    override fun onClick(movieId: Int?) {
+    override fun onClick(movieData: MovieData?) {
         // go to detail movie
         safeToNavigate(R.id.action_homeFragment_to_detailMovieFragment) {
-            findNavController().navigate(it, bundleOf(MOVIE_ID_KEY to movieId))
+            findNavController().navigate(it, bundleOf(MOVIE_DATA_KEY to movieData))
         }
     }
 

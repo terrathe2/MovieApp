@@ -3,18 +3,211 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.redhaputra.movieapp.screen.detail.DetailMovieViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/detailToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="?colorPrimary"
+            android:elevation="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivDetailToolbarBack"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/cd_back_icon"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:src="@drawable/ic_arrow_back_24"
+                app:tint="@color/toolbar_title" />
+
+            <TextView
+                android:id="@+id/tvDetailToolbarTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/detail"
+                android:textColor="@color/toolbar_title"
+                android:textStyle="bold"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srDetailMovie"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@android:color/white"
+            app:refreshing="@{viewModel.isRefreshing}"
+            app:onRefreshListener="@{() -> viewModel.onRefresh()}"
+            app:layout_constraintTop_toBottomOf="@id/detailToolbar"
+            app:layout_constraintBottom_toTopOf="@id/detailFooter">
+
+            <ScrollView
+                android:id="@+id/svDetailMovie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white">
+
+                    <ImageView
+                        android:id="@+id/ivDetailMovie"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:background="@color/img_background"
+                        android:contentDescription="@string/cd_movie_image"
+                        android:adjustViewBounds="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintDimensionRatio="W, 1:1.5"/>
+
+                    <TextView
+                        android:id="@+id/tvDetailTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:text="@{viewModel.movieData.title}"
+                        tools:text="Title"
+                        app:layout_constraintTop_toBottomOf="@id/ivDetailMovie"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvDetailOverviewTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="@string/overview"
+                        app:layout_constraintTop_toBottomOf="@id/tvDetailTitle"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvDetailOverviewDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:text="@{viewModel.movieData.overview}"
+                        tools:text="ceritanya ini overview yang panjang banget, kaya kereta. Tp baru ngetik dikit aja udh pegel ya, harusnya td pake lorem ipsum aja"
+                        app:layout_constraintTop_toBottomOf="@id/tvDetailOverviewTitle"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvDetailReviewTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="@string/review"
+                        app:layout_constraintTop_toBottomOf="@id/tvDetailOverviewDesc"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvDetailReviewDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:text="@{viewModel.movieData.review}"
+                        tools:text="ceritanya ini review yang panjang banget, kaya kereta. Tp baru ngetik dikit aja udh pegel ya, harusnya td pake lorem ipsum aja"
+                        app:layout_constraintTop_toBottomOf="@id/tvDetailReviewTitle"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/detailFooter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Detail Fragment!"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="?actionBarSize"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/ivDetailFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/cd_back_icon"
+                android:paddingStart="16dp"
+                android:paddingEnd="4dp"
+                android:src="@drawable/ic_outline_favorite_24"
+                android:onClick="@{()->viewModel.toggleFavoriteMovie()}"
+                app:tint="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/ivDetailShare"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/cd_back_icon"
+                android:paddingStart="4dp"
+                android:paddingEnd="16dp"
+                android:src="@drawable/ic_share_24"
+                app:tint="@android:color/black"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLoading"
+            visible="@{viewModel.isLoading}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/overlay"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="?colorPrimary" />
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
