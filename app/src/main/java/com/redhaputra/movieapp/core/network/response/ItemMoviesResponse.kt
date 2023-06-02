@@ -13,6 +13,8 @@ data class ItemMoviesResponse(
     @Json(name = "id")
     val id: Int,
     @Json(name = "backdrop_path")
+    val backImg: String,
+    @Json(name = "poster_path")
     val posterImg: String,
     @Json(name = "overview")
     val overview: String,

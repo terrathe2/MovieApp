@@ -1,41 +1,41 @@
-package com.redhaputra.movieapp.screen.home.adapter
+package com.redhaputra.movieapp.common.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.RequestManager
 import com.redhaputra.movieapp.R
-import com.redhaputra.movieapp.common.ui.adapters.MovieListPagingListener
 import com.redhaputra.movieapp.common.ui.base.BaseViewHolder
 import com.redhaputra.movieapp.common.ui.utils.StringUtils.toPosterImg
 import com.redhaputra.movieapp.core.network.response.ItemMoviesResponse
-import com.redhaputra.movieapp.databinding.ItemListPopularMovieBinding
+import com.redhaputra.movieapp.databinding.ItemListMovieBinding
 
 /**
- * Class describes popular movie list item view within RecyclerView.
+ * Class describes common movie list item view within RecyclerView.
  *
  * @see BaseViewHolder
  */
-class PopularMovieListViewHolder(
+class MovieListViewHolder(
     inflater: LayoutInflater,
     parent: ViewGroup,
     private val listener: MovieListPagingListener
-) : BaseViewHolder<ItemListPopularMovieBinding>(
-    ItemListPopularMovieBinding.inflate(inflater, parent, false)
+) : BaseViewHolder<ItemListMovieBinding>(
+    ItemListMovieBinding.inflate(inflater, parent, false)
 ) {
     /**
      * Bind view data binding variables.
      *
-     * @param data popular movie list item.
+     * @param data movie list item.
      */
     fun bind(data: ItemMoviesResponse, glide: RequestManager) {
+        binding.item = data
         binding.root.setOnClickListener {
             listener.onClick(data.id)
         }
-        binding.ivPopularMovie.setPadding(0, 0, 0, 0)
-        glide.load(data.backImg.toPosterImg())
-            .fitCenter()
+        binding.ivMovie.setPadding(0, 0, 0, 0)
+        glide.load(data.posterImg.toPosterImg())
+            .centerCrop()
             .placeholder(R.drawable.ic_empty_movie_img_24)
-            .into(binding.ivPopularMovie)
+            .into(binding.ivMovie)
         binding.executePendingBindings()
     }
 }

@@ -10,6 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.redhaputra.movieapp.common.ui.adapters.MovieListPagingSource
 import com.redhaputra.movieapp.common.ui.model.MovieListType.POPULAR
+import com.redhaputra.movieapp.common.ui.model.MovieListType.TOP_RATED
 import com.redhaputra.movieapp.core.network.repositories.MovieRepository
 import com.redhaputra.movieapp.core.network.response.ItemMoviesResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +36,13 @@ class HomeViewModel @Inject constructor(
     val popularMovieList: LiveData<PagingData<ItemMoviesResponse>> =
         Pager(config = pagingConfig) {
             MovieListPagingSource(repository = repository, POPULAR)
+        }.flow
+            .flowOn(Dispatchers.IO)
+            .cachedIn(viewModelScope)
+            .asLiveData()
+    val topRatedMovieList: LiveData<PagingData<ItemMoviesResponse>> =
+        Pager(config = pagingConfig) {
+            MovieListPagingSource(repository = repository, TOP_RATED)
         }.flow
             .flowOn(Dispatchers.IO)
             .cachedIn(viewModelScope)

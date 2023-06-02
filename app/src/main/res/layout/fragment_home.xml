@@ -65,7 +65,7 @@
                     tools:listitem="@layout/item_list_popular_movie" />
 
                 <include
-                    android:id="@+id/popular_loading"
+                    android:id="@+id/popularLoading"
                     layout="@layout/list_loading" />
 
             </FrameLayout>
@@ -74,6 +74,24 @@
                 android:id="@+id/tvTopRatedMovie"
                 layout="@layout/section_title"
                 app:title="@{@string/top_rated}" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTopRatedMovie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="16dp"
+                    android:clipToPadding="false"
+                    tools:listitem="@layout/item_list_movie" />
+
+                <include
+                    android:id="@+id/topRatedLoading"
+                    layout="@layout/list_loading" />
+
+            </FrameLayout>
 
         </LinearLayout>
 
