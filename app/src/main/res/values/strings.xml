@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MovieApp</string>
+
+    <!-- Image Content Description -->
+    <string name="cd_favorite_icon">Favorite Icon</string>
+    <string name="cd_loading_icon">Loading Icon</string>
+    <string name="cd_movie_image">Movie Image</string>
+
+    <string name="empty_movie_list_desc">Movie List is empty</string>
+    <string name="movie">Movie</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="popular_movie">Popular Movie</string>
+    <string name="top_rated">Top Rated</string>
 </resources>

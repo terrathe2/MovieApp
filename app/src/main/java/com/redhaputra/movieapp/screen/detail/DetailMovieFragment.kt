@@ -10,4 +10,8 @@ import com.redhaputra.movieapp.databinding.FragmentDetailMovieBinding
  */
 class DetailMovieFragment :
     BaseFragment<FragmentDetailMovieBinding>(R.layout.fragment_detail_movie) {
+
+    companion object {
+        const val MOVIE_ID_KEY = "MOVIE_ID_KEY"
+    }
 }

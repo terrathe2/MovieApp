@@ -1,7 +1,7 @@
 package com.redhaputra.movieapp.core.di.module
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.redhaputra.movieapp.core.network.AuthorizationInterceptor
+import com.redhaputra.movieapp.core.network.interceptor.AuthorizationInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

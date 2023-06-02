@@ -1,4 +1,4 @@
-package com.redhaputra.movieapp.core.network
+package com.redhaputra.movieapp.core.network.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Request
