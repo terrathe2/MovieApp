@@ -82,13 +82,39 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTopRatedMovie"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingHorizontal="16dp"
+                    android:paddingBottom="4dp"
                     android:clipToPadding="false"
                     tools:listitem="@layout/item_list_movie" />
 
                 <include
                     android:id="@+id/topRatedLoading"
+                    layout="@layout/list_loading" />
+
+            </FrameLayout>
+
+            <include
+                android:id="@+id/tvNowPlayingMovie"
+                layout="@layout/section_title"
+                app:title="@{@string/now_playing}" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvNowPlayingMovie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="4dp"
+                    android:clipToPadding="false"
+                    tools:listitem="@layout/item_list_movie" />
+
+                <include
+                    android:id="@+id/nowPlayingLoading"
                     layout="@layout/list_loading" />
 
             </FrameLayout>

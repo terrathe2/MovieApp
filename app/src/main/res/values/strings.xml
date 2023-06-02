@@ -8,8 +8,7 @@
 
     <string name="empty_movie_list_desc">Movie List is empty</string>
     <string name="movie">Movie</string>
+    <string name="now_playing">Now Playing</string>
     <string name="popular_movie">Popular Movie</string>
     <string name="top_rated">Top Rated</string>
-    <string name="load_more_title">An error occurred, failed to load more</string>
-    <string name="load_more_desc">Tap to reload</string>
 </resources>

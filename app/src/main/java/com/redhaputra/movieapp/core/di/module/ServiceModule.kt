@@ -21,12 +21,12 @@ object ServiceModule {
     /**
      * Create a provider method binding for [MovieService].
      *
-     * @return Instance of Pokemon service.
+     * @return Instance of Movie service.
      * @see Provides
      */
     @Singleton
     @Provides
-    fun providePokemonService(
+    fun provideMovieService(
         @Named("authClient") client: OkHttpClient,
         retrofitBuilder: Retrofit.Builder
     ): MovieService = retrofitBuilder

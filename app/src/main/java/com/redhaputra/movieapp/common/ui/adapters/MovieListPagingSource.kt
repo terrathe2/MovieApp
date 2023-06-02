@@ -34,13 +34,13 @@ class MovieListPagingSource(
         // Since 1 is the lowest page number, return null to signify no more pages should
         // be loaded before it.
         val prevKey = if (pageNumber <= 1) null else pageNumber - 1
-        val loadSize = params.loadSize
         val param = MovieListBody(page = pageNumber)
         return when (val response = repository.getMovieList(param, movieListType)) {
             is NetworkResponse.Success -> {
+                val totalPages = response.data?.totalPages ?: 1
                 val data = response.data?.results ?: listOf()
                 val nextKey =
-                    if (data.isNotEmpty() && data.size >= loadSize && pageNumber <= MAX_PAGE) {
+                    if (data.isNotEmpty() && pageNumber < totalPages && pageNumber < MAX_PAGE) {
                         pageNumber + 1
                     } else {
                         null

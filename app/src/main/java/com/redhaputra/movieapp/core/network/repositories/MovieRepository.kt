@@ -8,7 +8,7 @@ import com.redhaputra.movieapp.core.network.services.MovieService
 import java.io.IOException
 
 /**
- * Repository module for handling pokemon api response operations.
+ * Repository module for handling Movie api response operations.
  */
 class MovieRepository(
     private val service: MovieService

@@ -1,15 +1,13 @@
 package com.redhaputra.movieapp.common.ui.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.redhaputra.movieapp.R
 import com.redhaputra.movieapp.common.ui.base.BasePagingAdapter
-import com.redhaputra.movieapp.core.network.response.ItemMoviesResponse
+import com.redhaputra.movieapp.common.ui.model.MovieData
 
 /**
  * Class for presenting Common Movie List data in a [RecyclerView], including computing
@@ -21,7 +19,7 @@ import com.redhaputra.movieapp.core.network.response.ItemMoviesResponse
 class MovieListPagingAdapter (
     private val listener: MovieListPagingListener,
     private val requestManager: RequestManager
-) : BasePagingAdapter<ItemMoviesResponse>(
+) : BasePagingAdapter<MovieData>(
     layoutId = R.layout.item_list_movie,
     itemsSame = { old, new -> old.id == new.id },
     contentsSame = { old, new -> old == new }

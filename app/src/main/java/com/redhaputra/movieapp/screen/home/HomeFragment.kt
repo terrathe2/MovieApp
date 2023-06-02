@@ -20,6 +20,9 @@ import com.redhaputra.movieapp.common.ui.adapters.MovieListPagingAdapter
 import com.redhaputra.movieapp.common.ui.adapters.MovieListPagingListener
 import com.redhaputra.movieapp.common.ui.adapters.PeekingLinearLayoutManager
 import com.redhaputra.movieapp.common.ui.base.BaseFragment
+import com.redhaputra.movieapp.common.ui.base.BasePagingAdapter
+import com.redhaputra.movieapp.common.ui.model.MovieData
+import com.redhaputra.movieapp.common.ui.model.MovieListType
 import com.redhaputra.movieapp.databinding.FragmentHomeBinding
 import com.redhaputra.movieapp.screen.detail.DetailMovieFragment.Companion.MOVIE_ID_KEY
 import com.redhaputra.movieapp.screen.home.adapter.PopularMoviePagingAdapter
@@ -48,6 +51,11 @@ class HomeFragment :
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
     }
+    private val nowPlayingAdapter by lazy {
+        MovieListPagingAdapter(this, Glide.with(this)).apply {
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeClickAction()
@@ -55,6 +63,7 @@ class HomeFragment :
         setupPagingAdapter()
         setupPopularPagingListener()
         setupTopRatedPagingListener()
+        setupNowPlayingPagingListener()
     }
 
     override fun onClick(movieId: Int?) {
@@ -85,21 +94,37 @@ class HomeFragment :
                 topRatedAdapter.submitData(it)
             }
         }
+
+        viewModel.nowPlayingMovieList.observe(viewLifecycleOwner) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                nowPlayingAdapter.submitData(it)
+            }
+        }
     }
 
     private fun setupPagingAdapter() {
-        val peekLayoutManager = PeekingLinearLayoutManager(requireContext(), HORIZONTAL, false)
-        val layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
-        viewBinding.rvPopularMovie.layoutManager = peekLayoutManager
+        val popularLayoutManager = PeekingLinearLayoutManager(requireContext(), HORIZONTAL, false)
+        val topRatedLayoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
+        val nowPlayingLayoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
+        // popular
+        viewBinding.rvPopularMovie.layoutManager = popularLayoutManager
         viewBinding.rvPopularMovie.adapter = popularAdapter.withLoadStateFooter(
             MovieListLoadStateAdapter {
                 popularAdapter.retry()
             }
         )
-        viewBinding.rvTopRatedMovie.layoutManager = layoutManager
+        // top rated
+        viewBinding.rvTopRatedMovie.layoutManager = topRatedLayoutManager
         viewBinding.rvTopRatedMovie.adapter = topRatedAdapter.withLoadStateFooter(
             MovieListLoadStateAdapter {
                 topRatedAdapter.retry()
+            }
+        )
+        // now playing
+        viewBinding.rvNowPlayingMovie.layoutManager = nowPlayingLayoutManager
+        viewBinding.rvNowPlayingMovie.adapter = nowPlayingAdapter.withLoadStateFooter(
+            MovieListLoadStateAdapter {
+                nowPlayingAdapter.retry()
             }
         )
     }
@@ -112,7 +137,7 @@ class HomeFragment :
                     it.refresh is LoadState.Loading && popularAdapter.itemCount == 0
                 }
                 .collect {
-                    togglePopularLoading(true)
+                    toggleLoading(MovieListType.POPULAR, true)
                 }
         }
 
@@ -123,8 +148,8 @@ class HomeFragment :
                     it.refresh is LoadState.NotLoading
                 }
                 .collect {
-                    togglePopularLoading(false)
-                    togglePopularLayout()
+                    toggleLoading(MovieListType.POPULAR, false)
+                    toggleLayout(MovieListType.POPULAR, popularAdapter)
                 }
         }
 
@@ -133,23 +158,11 @@ class HomeFragment :
                 .distinctUntilChangedBy { it.refresh }
                 .filter { it.refresh is LoadState.Error }
                 .collect { loadState ->
-                    togglePopularLoading(false)
-                    togglePopularLayout()
+                    toggleLoading(MovieListType.POPULAR, false)
+                    toggleLayout(MovieListType.POPULAR, popularAdapter)
                     showError(loadState)
                 }
         }
-    }
-
-    private fun togglePopularLoading(visible: Boolean) {
-        viewBinding.popularLoading.frameLoading.isVisible = visible
-        viewBinding.rvPopularMovie.isVisible = !visible
-    }
-
-    private fun togglePopularLayout() {
-        val emptyReport = popularAdapter.snapshot().items.isEmpty()
-
-        viewBinding.rvPopularMovie.isVisible = true
-        popularAdapter.setEmptyState(emptyReport)
     }
 
     private fun setupTopRatedPagingListener() {
@@ -160,7 +173,7 @@ class HomeFragment :
                     it.refresh is LoadState.Loading && topRatedAdapter.itemCount == 0
                 }
                 .collect {
-                    toggleTopRatedLoading(true)
+                    toggleLoading(MovieListType.TOP_RATED, true)
                 }
         }
 
@@ -171,8 +184,8 @@ class HomeFragment :
                     it.refresh is LoadState.NotLoading
                 }
                 .collect {
-                    toggleTopRatedLoading(false)
-                    toggleTopRatedLayout()
+                    toggleLoading(MovieListType.TOP_RATED, false)
+                    toggleLayout(MovieListType.TOP_RATED, topRatedAdapter)
                 }
         }
 
@@ -181,23 +194,77 @@ class HomeFragment :
                 .distinctUntilChangedBy { it.refresh }
                 .filter { it.refresh is LoadState.Error }
                 .collect { loadState ->
-                    toggleTopRatedLoading(false)
-                    toggleTopRatedLayout()
+                    toggleLoading(MovieListType.TOP_RATED, false)
+                    toggleLayout(MovieListType.TOP_RATED, topRatedAdapter)
                     showError(loadState)
                 }
         }
     }
 
-    private fun toggleTopRatedLoading(visible: Boolean) {
-        viewBinding.topRatedLoading.frameLoading.isVisible = visible
-        viewBinding.rvTopRatedMovie.isVisible = !visible
+    private fun setupNowPlayingPagingListener() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            nowPlayingAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter {
+                    it.refresh is LoadState.Loading && topRatedAdapter.itemCount == 0
+                }
+                .collect {
+                    toggleLoading(MovieListType.NOW_PLAYING, true)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            nowPlayingAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter {
+                    it.refresh is LoadState.NotLoading
+                }
+                .collect {
+                    toggleLoading(MovieListType.NOW_PLAYING, false)
+                    toggleLayout(MovieListType.NOW_PLAYING, nowPlayingAdapter)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            nowPlayingAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.Error }
+                .collect { loadState ->
+                    toggleLoading(MovieListType.NOW_PLAYING, false)
+                    toggleLayout(MovieListType.NOW_PLAYING, nowPlayingAdapter)
+                    showError(loadState)
+                }
+        }
     }
 
-    private fun toggleTopRatedLayout() {
-        val emptyReport = topRatedAdapter.snapshot().items.isEmpty()
+    private fun toggleLoading(type: MovieListType, visible: Boolean) {
+        with(viewBinding) {
+            when (type) {
+                MovieListType.POPULAR -> {
+                    viewBinding.popularLoading.frameLoading.isVisible = visible
+                    viewBinding.rvPopularMovie.isVisible = !visible
+                }
+                MovieListType.TOP_RATED -> {
+                    topRatedLoading.frameLoading.isVisible = visible
+                    rvTopRatedMovie.isVisible = !visible
+                }
+                MovieListType.NOW_PLAYING -> {
+                    nowPlayingLoading.frameLoading.isVisible = visible
+                    rvNowPlayingMovie.isVisible = !visible
+                }
+            }
+        }
+    }
 
-        viewBinding.rvTopRatedMovie.isVisible = true
-        topRatedAdapter.setEmptyState(emptyReport)
+    private fun toggleLayout(type: MovieListType, adapter: BasePagingAdapter<MovieData>) {
+        when (type) {
+            MovieListType.POPULAR -> viewBinding.rvPopularMovie.isVisible = true
+            MovieListType.TOP_RATED -> viewBinding.rvTopRatedMovie.isVisible = true
+            MovieListType.NOW_PLAYING -> viewBinding.rvNowPlayingMovie.isVisible = true
+        }
+
+        val emptyReport = adapter.snapshot().items.isEmpty()
+        adapter.setEmptyState(emptyReport)
     }
 
     private fun showError(loadState: CombinedLoadStates) {

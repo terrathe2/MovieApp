@@ -1,17 +1,15 @@
 package com.redhaputra.movieapp.screen.home.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.redhaputra.movieapp.R
 import com.redhaputra.movieapp.common.ui.adapters.EmptyMovieListStateViewHolder
 import com.redhaputra.movieapp.common.ui.adapters.MovieListPagingListener
 import com.redhaputra.movieapp.common.ui.base.BasePagingAdapter
-import com.redhaputra.movieapp.core.network.response.ItemMoviesResponse
+import com.redhaputra.movieapp.common.ui.model.MovieData
 
 /**
  * Class for presenting Popular Movie List data in a [RecyclerView], including computing
@@ -24,7 +22,7 @@ class PopularMoviePagingAdapter(
     private val listener: MovieListPagingListener,
     private val requestManager: RequestManager
 ) :
-    BasePagingAdapter<ItemMoviesResponse>(
+    BasePagingAdapter<MovieData>(
         layoutId = R.layout.item_list_popular_movie,
         itemsSame = { oldItem, newItem -> oldItem.id == newItem.id },
         contentsSame = { oldItem, newItem -> oldItem == newItem }
