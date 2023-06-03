@@ -10,6 +10,7 @@
 
     <string name="detail">Detail</string>
     <string name="empty_movie_list_desc">Movie List is empty</string>
+    <string name="fav_movie">Favorite Movie</string>
     <string name="movie">Movie</string>
     <string name="now_playing">Now Playing</string>
     <string name="option_1">Option 1</string>
