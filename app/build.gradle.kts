@@ -78,4 +78,9 @@ dependencies {
 
     // Image Loader
     implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    // Test dependencies
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("io.mockk:mockk:1.13.5")
 }
