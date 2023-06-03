@@ -32,7 +32,7 @@ class PopularMovieListViewHolder(
         }
         binding.ivPopularMovie.setPadding(0, 0, 0, 0)
         glide.load(data.backImg)
-            .fitCenter()
+            .centerCrop()
             .placeholder(R.drawable.ic_empty_movie_img_24)
             .error(R.drawable.ic_empty_movie_img_24)
             .into(binding.ivPopularMovie)
