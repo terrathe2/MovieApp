@@ -58,7 +58,7 @@ class DetailMovieFragment :
 
     private fun observeViewAction() {
         viewBinding.ivDetailToolbarBack.setOnClickListener {
-            onBackPressed()
+            findNavController().popBackStack()
         }
 
         viewBinding.ivDetailShare.setOnClickListener {
@@ -93,9 +93,5 @@ class DetailMovieFragment :
             val favIcon = ContextCompat.getDrawable(requireContext(), iconId)
             viewBinding.ivDetailFavorite.setImageDrawable(favIcon)
         }
-    }
-
-    private fun onBackPressed() {
-        findNavController().popBackStack()
     }
 }
