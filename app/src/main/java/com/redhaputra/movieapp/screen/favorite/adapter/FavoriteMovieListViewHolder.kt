@@ -32,13 +32,11 @@ class FavoriteMovieListViewHolder(
             listener.onClick(data)
         }
         binding.ivFavMovie.setPadding(0, 0, 0, 0)
-        if (data.posterImg.isNotEmpty()) {
-            glide.load(data.posterImg)
-                .centerCrop()
-                .placeholder(R.drawable.ic_empty_movie_img_24)
-                .error(R.drawable.ic_empty_movie_img_24)
-                .into(binding.ivFavMovie)
-        }
+        glide.load(data.posterImg)
+            .centerCrop()
+            .placeholder(R.drawable.ic_empty_movie_img_24)
+            .error(R.drawable.ic_empty_movie_img_24)
+            .into(binding.ivFavMovie)
         binding.executePendingBindings()
     }
 }

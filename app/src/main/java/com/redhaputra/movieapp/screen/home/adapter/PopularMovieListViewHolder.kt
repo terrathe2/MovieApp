@@ -31,13 +31,11 @@ class PopularMovieListViewHolder(
             listener.onClick(data)
         }
         binding.ivPopularMovie.setPadding(0, 0, 0, 0)
-        if (data.backImg.isNotEmpty()) {
-            glide.load(data.backImg)
-                .fitCenter()
-                .placeholder(R.drawable.ic_empty_movie_img_24)
-                .error(R.drawable.ic_empty_movie_img_24)
-                .into(binding.ivPopularMovie)
-        }
+        glide.load(data.backImg)
+            .fitCenter()
+            .placeholder(R.drawable.ic_empty_movie_img_24)
+            .error(R.drawable.ic_empty_movie_img_24)
+            .into(binding.ivPopularMovie)
         binding.executePendingBindings()
     }
 }
